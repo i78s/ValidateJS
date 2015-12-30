@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es5",
+        "noImplicitAny": true,
+        "suppressImplicitAnyIndexErrors": true
+    },
+    "filesGlob": [
+        "src/**/*.ts"
+    ],
+    "files": [
+        "src/Validate.ts",
+        "src/ValidateMessages.ts"
+    ]
+}
