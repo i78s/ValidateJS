@@ -8,12 +8,6 @@ describe('Validate', () => {
 
     let spy = {};
 
-    function dispatchEvent(event, element) {
-        let e = document.createEvent('HTMLEvents');
-        e.initEvent(event, true, true);
-        element.dispatchEvent(e);
-    }
-
     beforeEach(() => {
         // document.body.innerHTML = __html__["test/fixtures/index.html"];
         document.body.innerHTML = `<form id="form"><input type="text" name="text" required><button type="submit" disabled="disabled">送信</button></form>`;
@@ -44,6 +38,7 @@ describe('Validate', () => {
             'init',
             'isValid',
             'update',
+            'trigger',
             'disabled',
             'submit',
             'destroy',
@@ -73,18 +68,18 @@ describe('Validate', () => {
         assert(validate.submitBtn.outerHTML.replace(/\n|\t/g, '') === '<button type="submit" disabled="disabled">送信</button>')
 
         // Event
-        dispatchEvent('input', $form.text);
+        validate.trigger('input', $form.text);
         assert(spy.update.callCount === 1);
-        dispatchEvent('change', $form.text);
+        validate.trigger('change', $form.text);
         assert(spy.update.callCount === 2);
 
         // ボタンがdisabledだとsubmitイベントは発火しないらしい
-        dispatchEvent('submit', $form);
+        validate.trigger('submit', $form);
         assert(spy.submit.callCount === 0);
 
         $form.text.value = 'あいうえお';
-        dispatchEvent('input', $form.text);
-        dispatchEvent('submit', $form);
+        validate.trigger('input', $form.text);
+        validate.trigger('submit', $form);
         assert(spy.submit.callCount === 1);
     });
 
@@ -92,7 +87,7 @@ describe('Validate', () => {
         assert(validate.isValid() === false);
 
         $form.text.value = 'あいうえお';
-        dispatchEvent('input', $form.text);
+        validate.trigger('input', $form.text);
         assert(validate.isValid() === true);
     });
 
@@ -104,17 +99,25 @@ describe('Validate', () => {
         assert($submit.getAttribute('disabled') === 'disabled');
     });
 
+    it('trigger', () => {
+        validate.trigger('change', $form.text);
+        assert(spy.update.callCount === 1);
+
+        validate.trigger('change', $form.text);
+        assert(spy.update.callCount === 2);
+    });
+
     describe('update', () => {
 
         it('一度でも変更されたらis-dirtyクラスをつける', () => {
             assert($form.text.classList.contains('is-dirty') === false);
 
             $form.text.value = 'あいうえお';
-            dispatchEvent('input', $form.text);
+            validate.trigger('input', $form.text);
             assert($form.text.classList.contains('is-dirty'));
 
             $form.text.value = '';
-            dispatchEvent('input', $form.text);
+            validate.trigger('input', $form.text);
             assert($form.text.classList.contains('is-dirty'));
         });
 
@@ -123,12 +126,12 @@ describe('Validate', () => {
             assert($submit.getAttribute('disabled') === 'disabled');
 
             $form.text.value = 'あいうえお';
-            dispatchEvent('input', $form.text);
+            validate.trigger('input', $form.text);
             assert(validate.isValid() === true);
             assert($submit.getAttribute('disabled') === null);
 
             $form.text.value = '';
-            dispatchEvent('input', $form.text);
+            validate.trigger('input', $form.text);
             assert(validate.isValid() === false);
             assert($submit.getAttribute('disabled') === 'disabled');
         });
@@ -139,11 +142,11 @@ describe('Validate', () => {
             spy.onCheckHandler = sinon.spy(validate.option, 'onCheckHandler');
 
             $form.text.value = 'あいうえお';
-            dispatchEvent('input', $form.text);
+            validate.trigger('input', $form.text);
             assert(spy.onCheckHandler.callCount === 1);
 
             $form.text.value = '';
-            dispatchEvent('input', $form.text);
+            validate.trigger('input', $form.text);
             assert(spy.onCheckHandler.callCount === 2);
 
             assert(spy.onCheckHandler.calledWith($form.text, $form.text.validity));  // callbackの引数チェック
@@ -161,19 +164,19 @@ describe('Validate', () => {
             spy.customValidate = sinon.spy(validate.option.customValidate, 'text');
 
             $form.text.value = 'あいうえお';
-            dispatchEvent('input', $form.text);
+            validate.trigger('input', $form.text);
             assert(spy.customValidate.callCount === 1);
             assert(validate.isValid() === false);
             assert($submit.getAttribute('disabled') === 'disabled');
 
             $form.text.value = '';
-            dispatchEvent('input', $form.text);
+            validate.trigger('input', $form.text);
             assert(spy.customValidate.callCount === 2);
             assert(validate.isValid() === false);
             assert($submit.getAttribute('disabled') === 'disabled');
 
             $form.text.value = 'かきくけこ';
-            dispatchEvent('input', $form.text);
+            validate.trigger('input', $form.text);
             assert(spy.customValidate.callCount === 3);
             assert(validate.isValid() === true);
             assert($submit.getAttribute('disabled') === null);
@@ -194,7 +197,7 @@ describe('Validate', () => {
             assert(spy.formSubmit.callCount === 0);
 
             $form.text.value = 'あいうえお';
-            dispatchEvent('input', $form.text);
+            validate.trigger('input', $form.text);
             validate.submit();
             assert(spy.submit.callCount === 2);
             assert(spy.formSubmit.callCount === 1);
@@ -210,7 +213,7 @@ describe('Validate', () => {
             assert(spy.formSubmit.callCount === 0);
 
             $form.text.value = 'あいうえお';
-            dispatchEvent('input', $form.text);
+            validate.trigger('input', $form.text);
             validate.submit();
             assert(spy.submit.callCount === 2);
             assert(spy.formSubmit.callCount === 0);
@@ -221,14 +224,14 @@ describe('Validate', () => {
     it('destroy', () => {
         validate.destroy();
 
-        dispatchEvent('input', $form.text);
+        validate.trigger('input', $form.text);
         assert(spy.update.callCount === 0);
-        dispatchEvent('change', $form.text);
+        validate.trigger('change', $form.text);
         assert(spy.update.callCount === 0);
 
         $form.text.value = 'あいうえお';
-        dispatchEvent('input', $form.text);
-        dispatchEvent('submit', $form);
+        validate.trigger('input', $form.text);
+        validate.trigger('submit', $form);
         assert(spy.submit.callCount === 0);
     });
 
