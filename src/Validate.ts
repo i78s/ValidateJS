@@ -92,6 +92,16 @@ export default class Validate {
     }
 
     /**
+     * changeイベントを強制発火させる
+     * @param element
+     */
+    trigger(event: string, element: HTMLInputElement | HTMLSelectElement) {
+        let e = document.createEvent('HTMLEvents');
+        e.initEvent(event, true, true);
+        element.dispatchEvent(e);
+    }
+
+    /**
      * 送信ボタンのdisabledを切り替える
      * @param bool
      */
