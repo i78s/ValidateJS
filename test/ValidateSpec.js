@@ -160,7 +160,7 @@ describe('Validate', () => {
         });
 
         it('onCheckHandler', () => {
-            let onCheckHandler = (element, validity) => {};
+            let onCheckHandler = function(element, validity) {};
             validate.option.onCheckHandler = onCheckHandler;
             spy.onCheckHandler = sinon.spy(validate.option, 'onCheckHandler');
 
@@ -179,12 +179,10 @@ describe('Validate', () => {
             setValue();
 
             let customValidate = {
-                password: (element, form) => {
-                    // todo thisがなぜかテスト上ではundefined
-                    validate.trigger('input', form['passwordConfirm']);
-                    //this.trigger('input', form['passwordConfirm']);
+                password: function(element, form) {
+                    this.trigger('input', form['passwordConfirm']);
                 },
-                passwordConfirm: (element, form) => {
+                passwordConfirm: function(element, form) {
                     if (element.value !== form['password'].value) {
                         element.setCustomValidity('パスワードが一致しません');
                         return;
@@ -277,7 +275,7 @@ describe('Validate', () => {
         });
 
         it('option.onSubmitHandler指定 (form.submitは発火させない)', () => {
-            let submitHandler = () => {};
+            let submitHandler = function() {};
             validate.option.onSubmitHandler = submitHandler;
             spy.onSubmitHandler = sinon.spy(validate.option, 'onSubmitHandler');
 
