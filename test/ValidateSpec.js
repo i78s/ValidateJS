@@ -2,15 +2,26 @@ import Validate from '../lib/Validate';
 
 describe('Validate', () => {
 
+    let fixtures = __html__["test/fixtures/index.html"];
     let validate;
     let $form;
     let $submit;
 
     let spy = {};
 
+    let setValue = () => {
+        $form.name.value = 'なまえ';
+        $form.text.value = 'あいうえお';
+        $form.password.value = 'passord';
+        $form.passwordConfirm.value = 'passord';
+        validate.trigger('input', $form.name);
+        validate.trigger('input', $form.text);
+        validate.trigger('input', $form.password);
+        validate.trigger('input', $form.passwordConfirm);
+    };
+
     beforeEach(() => {
-        // document.body.innerHTML = __html__["test/fixtures/index.html"];
-        document.body.innerHTML = `<form id="form"><input type="text" name="text" required><button type="submit" disabled="disabled">送信</button></form>`;
+         document.body.innerHTML = fixtures;
 
         $form = document.getElementById('form');
         $submit = $form.querySelector('button');
@@ -64,8 +75,9 @@ describe('Validate', () => {
 
     it('init', () => {
         // DOM
-        assert($form.outerHTML.replace(/\n|\t/g, '') === '<form id="form"><input type="text" name="text" required=""><button type="submit" disabled="disabled">送信</button></form>');
-        assert(validate.submitBtn.outerHTML.replace(/\n|\t/g, '') === '<button type="submit" disabled="disabled">送信</button>')
+        let htmlString = '<form id="form"><input type="text" name="name" required=""><input type="text" name="text" minlength="4"><input type="email" name="email"><input type="tel" name="tel"><select name="select"><option value=""></option><option value="1">1</option><option value="2">2</option></select><input type="radio" name="radio"><input type="radio" name="radio"><input type="checkbox" name="checkbox"><input type="password" name="password" required=""><input type="password" name="passwordConfirm" required=""><button type="submit" disabled="disabled">送信</button></form>';
+        assert($form.outerHTML.replace(/>\s+/g,'>') === htmlString);
+        assert(validate.submitBtn.outerHTML.replace(/\n|\t/g, '') === '<button type="submit" disabled="disabled">送信</button>');
 
         // Event
         validate.trigger('input', $form.text);
@@ -73,12 +85,22 @@ describe('Validate', () => {
         validate.trigger('change', $form.text);
         assert(spy.update.callCount === 2);
 
+        validate.trigger('change', $form.select);
+        assert(spy.update.callCount === 3);
+
+        validate.trigger('input', $form.radio[0]);
+        assert(spy.update.callCount === 4);
+
+        validate.trigger('input', $form.checkbox);
+        assert(spy.update.callCount === 5);
+
         // ボタンがdisabledだとsubmitイベントは発火しないらしい
         validate.trigger('submit', $form);
         assert(spy.submit.callCount === 0);
 
-        $form.text.value = 'あいうえお';
-        validate.trigger('input', $form.text);
+        // validな状態でsubmit可能
+        setValue();
+
         validate.trigger('submit', $form);
         assert(spy.submit.callCount === 1);
     });
@@ -86,8 +108,8 @@ describe('Validate', () => {
     it('isValid', () => {
         assert(validate.isValid() === false);
 
-        $form.text.value = 'あいうえお';
-        validate.trigger('input', $form.text);
+        // validな状態でsubmit可能
+        setValue();
         assert(validate.isValid() === true);
     });
 
@@ -125,13 +147,14 @@ describe('Validate', () => {
             assert(validate.isValid() === false);
             assert($submit.getAttribute('disabled') === 'disabled');
 
-            $form.text.value = 'あいうえお';
-            validate.trigger('input', $form.text);
+            // validな状態でsubmit可能
+            setValue();
             assert(validate.isValid() === true);
             assert($submit.getAttribute('disabled') === null);
 
-            $form.text.value = '';
-            validate.trigger('input', $form.text);
+            // 必須項目を空にする
+            $form.name.value = '';
+            validate.trigger('input', $form.name);
             assert(validate.isValid() === false);
             assert($submit.getAttribute('disabled') === 'disabled');
         });
@@ -153,36 +176,87 @@ describe('Validate', () => {
         });
 
         it('カスタムバリデーション', () => {
-            let customValidate = (element, form) => {
-                if (element.value.indexOf('あいうえお') !== -1) {
-                    element.setCustomValidity('カスタムエラー');
-                } else {
+            setValue();
+
+            let customValidate = {
+                password: (element, form) => {
+                    // todo thisがなぜかテスト上ではundefined
+                    validate.trigger('input', form['passwordConfirm']);
+                    //this.trigger('input', form['passwordConfirm']);
+                },
+                passwordConfirm: (element, form) => {
+                    if (element.value !== form['password'].value) {
+                        element.setCustomValidity('パスワードが一致しません');
+                        return;
+                    }
                     element.setCustomValidity('');
                 }
             };
-            validate.option.customValidate.text = customValidate;
-            spy.customValidate = sinon.spy(validate.option.customValidate, 'text');
+            validate.option.customValidate = customValidate;
+            spy.customValidate = {
+                password: sinon.spy(validate.option.customValidate, 'password'),
+                passwordConfirm: sinon.spy(validate.option.customValidate, 'passwordConfirm')
+            };
+            spy.passwordConfirm = {
+                setCustomValidity: sinon.spy($form.passwordConfirm, 'setCustomValidity')
+            };
 
-            $form.text.value = 'あいうえお';
-            validate.trigger('input', $form.text);
-            assert(spy.customValidate.callCount === 1);
+            // パスワードの値を空にする
+            $form.password.value = '';
+            validate.trigger('input', $form.password);
+            assert(spy.customValidate.password.callCount === 1);
+            assert(spy.customValidate.passwordConfirm.callCount === 1);
+            assert(spy.passwordConfirm.setCustomValidity.calledWith('パスワードが一致しません'));
             assert(validate.isValid() === false);
             assert($submit.getAttribute('disabled') === 'disabled');
 
-            $form.text.value = '';
-            validate.trigger('input', $form.text);
-            assert(spy.customValidate.callCount === 2);
+            // パスワード確認の値を空にする
+            $form.passwordConfirm.value = '';
+            validate.trigger('input', $form.passwordConfirm);
+            assert(spy.customValidate.passwordConfirm.callCount === 2);
+            assert(spy.passwordConfirm.setCustomValidity.calledWith('パスワードが一致しません'));
             assert(validate.isValid() === false);
             assert($submit.getAttribute('disabled') === 'disabled');
 
-            $form.text.value = 'かきくけこ';
-            validate.trigger('input', $form.text);
-            assert(spy.customValidate.callCount === 3);
+            // パスワードの値を入力
+            $form.password.value = 'password';
+            validate.trigger('input', $form.password);
+            assert(spy.customValidate.password.callCount === 2);
+            assert(spy.customValidate.passwordConfirm.callCount === 3);
+            assert(spy.passwordConfirm.setCustomValidity.calledWith('パスワードが一致しません'));
+            assert(validate.isValid() === false);
+            assert($submit.getAttribute('disabled') === 'disabled');
+
+            // パスワード確認にパスワードと一致する値を入力
+            $form.passwordConfirm.value = 'password';
+            validate.trigger('input', $form.passwordConfirm);
+            assert(spy.customValidate.passwordConfirm.callCount === 4);
+            assert(spy.passwordConfirm.setCustomValidity.calledWith(''));
             assert(validate.isValid() === true);
             assert($submit.getAttribute('disabled') === null);
 
-            assert(spy.customValidate.calledWith($form.text, $form));  // callbackの引数チェック
-        })
+            // パスワードの値をパスワード確認と一致しない値に変更
+            $form.password.value = 'password123';
+            validate.trigger('input', $form.password);
+            assert(spy.customValidate.password.callCount === 3);
+            assert(spy.customValidate.passwordConfirm.callCount === 5);
+            assert(spy.passwordConfirm.setCustomValidity.calledWith('パスワードが一致しません'));
+            assert(validate.isValid() === false);
+            assert($submit.getAttribute('disabled') === 'disabled');
+
+            // パスワードの値をパスワード確認と一致する値に変更
+            $form.password.value = 'password';
+            validate.trigger('input', $form.password);
+            assert(spy.customValidate.password.callCount === 4);
+            assert(spy.customValidate.passwordConfirm.callCount === 6);
+            assert(spy.passwordConfirm.setCustomValidity.calledWith(''));
+            assert(validate.isValid() === true);
+            assert($submit.getAttribute('disabled') === null);
+
+            // callbackの引数チェック
+            assert(spy.customValidate.password.calledWith($form.password, $form));
+            assert(spy.customValidate.passwordConfirm.calledWith($form.passwordConfirm, $form));
+        });
     });
 
     describe('submit', () => {
@@ -196,8 +270,7 @@ describe('Validate', () => {
             assert(spy.submit.callCount === 1);
             assert(spy.formSubmit.callCount === 0);
 
-            $form.text.value = 'あいうえお';
-            validate.trigger('input', $form.text);
+            setValue();
             validate.submit();
             assert(spy.submit.callCount === 2);
             assert(spy.formSubmit.callCount === 1);
@@ -212,8 +285,7 @@ describe('Validate', () => {
             assert(spy.submit.callCount === 1);
             assert(spy.formSubmit.callCount === 0);
 
-            $form.text.value = 'あいうえお';
-            validate.trigger('input', $form.text);
+            setValue();
             validate.submit();
             assert(spy.submit.callCount === 2);
             assert(spy.formSubmit.callCount === 0);
