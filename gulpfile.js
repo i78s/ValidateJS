@@ -1,11 +1,11 @@
-var gulp = require('gulp');
-var path = require('path');
+"use strict";
+const gulp = require('gulp');
 
-var ts = require('gulp-typescript');
-var tsProject = ts.createProject('tsconfig.json');
-var exec = require('child_process').exec;
+const ts = require('gulp-typescript');
+const tsProject = ts.createProject('tsconfig.json');
+const exec = require('child_process').exec;
 
-var CONFIG = {
+const CONFIG = {
     path: {
         ts: {
             src: __dirname + '/src/*.ts',
@@ -21,16 +21,7 @@ gulp.task('watch', ['ts'], function() {
     gulp.watch(CONFIG.path.ts.src, ['ts']);
 });
 
-gulp.task('tsconfig', function (callback) {
-    return exec('$(npm bin)/tsconfig -u', (error, stdout, stderr) => {
-        if (stdout) console.log(`${stdout}`);
-        if (stderr) console.error(`${stderr}`);
-        if (error) console.error(`${error}`);
-        callback();
-    });
-});
-
-gulp.task('tsfmt', ["tsconfig"], (callback) => {
+gulp.task('tsfmt', (callback) => {
     return exec('$(npm bin)/tsfmt -r', (error, stdout, stderr) => {
         if (stdout) console.log(`${stdout}`);
         if (stderr) console.error(`${stderr}`);
@@ -39,7 +30,7 @@ gulp.task('tsfmt', ["tsconfig"], (callback) => {
     });
 });
 
-gulp.task('ts', ["tsfmt", "tsconfig"], function () {
+gulp.task('ts', ["tsfmt"], function () {
     return gulp.src(CONFIG.path.ts.src)
         .pipe(ts(tsProject))
         .pipe(gulp.dest(CONFIG.path.ts.dest));
