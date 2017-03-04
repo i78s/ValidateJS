@@ -1,6 +1,6 @@
 {
   "name": "i78s.validatejs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "フォームバリデーションライブラリ",
   "url": "https://github.com/i78s/ValidateJS",
   "keywords": [
