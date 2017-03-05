@@ -2,7 +2,14 @@ var path = require("path");
 var nodeModulesPath = path.join(__dirname, 'node_modules');
 
 module.exports = {
-    bail: true,
+    entry: {
+        Validate: './src/Validate.ts',
+        ValidateMessages: './src/ValidateMessages.ts'
+    },
+    output: {
+        path: './lib/',
+        filename: "[name].js"
+    },
     resolve: {
         extensions: ['.ts', '.js', ''],
         root: [
