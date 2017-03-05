@@ -1,4 +1,2 @@
-module.exports = {
-  Validate: require('./lib/Validate'),
-  ValidateMessages: require('./lib/ValidateMessages')
-};
+module.exports = require('./lib/Validate');
+exports.ValidateMessages = require('./lib/ValidateMessages');
