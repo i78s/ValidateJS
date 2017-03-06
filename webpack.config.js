@@ -3,8 +3,9 @@ var nodeModulesPath = path.join(__dirname, 'node_modules');
 
 module.exports = {
     entry: {
-        Validate: './src/Validate.ts',
-        ValidateMessages: './src/ValidateMessages.ts'
+        index: './src/index.ts',
+        Validate: ['./src/Validate.ts'],
+        ValidateMessages: ['./src/ValidateMessages.ts']
     },
     output: {
         path: './lib/',

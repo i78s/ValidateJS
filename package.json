@@ -15,8 +15,8 @@
   },
   "main": "./index.js",
   "scripts": {
-    "build": "$(npm bin)/webpack",
-    "watch": "$(npm bin)/webpack --watch",
+    "build": "$(npm bin)/tsc",
+    "watch": "$(npm bin)/tsc --watch",
     "test": "npm run build && karma start",
     "start": "npm run watch & npm test"
   },

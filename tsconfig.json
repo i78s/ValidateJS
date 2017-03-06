@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "outDir": "./lib",
         "module": "commonjs",
         "target": "es5",
         "noImplicitAny": true,
@@ -9,6 +10,7 @@
         "src/**/*.ts"
     ],
     "files": [
+        "src/index.ts",
         "src/Validate.ts",
         "src/ValidateMessages.ts"
     ]
