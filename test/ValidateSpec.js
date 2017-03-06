@@ -1,4 +1,4 @@
-import Validate from '../lib/Validate';
+import Validate from '../lib/';
 
 describe('Validate', () => {
 

@@ -1,4 +1,4 @@
-import ValidateMessages from '../lib/ValidateMessages';
+import { ValidateMessages } from '../lib';
 
 describe('ValidateMessages', () => {
 
