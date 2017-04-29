@@ -1,3 +1,7 @@
+interface HTMLElementEvent<T extends HTMLElement> extends Event {
+    target: T;
+}
+
 interface ValidateOption {
     customValidate?: {
         [key: string]: (element: HTMLInputElement | HTMLSelectElement, form: HTMLFormElement) => {};
@@ -13,9 +17,9 @@ export default class Validate {
     private form: HTMLFormElement;
     private submitBtn: HTMLButtonElement;
     option: ValidateOption;
-    private _submitHandler: (e: Event) => void;
-    private _changeHandler: (e: Event) => void;
-    private _inputHandler: (e: Event) => void;
+    private _submitHandler: (e: HTMLElementEvent<HTMLInputElement>) => void;
+    private _changeHandler: (e: HTMLElementEvent<HTMLInputElement>) => void;
+    private _inputHandler: (e: HTMLElementEvent<HTMLInputElement>) => void;
 
     constructor(element: HTMLFormElement, option: ValidateOption);
     constructor(element: string, option: ValidateOption);
@@ -38,13 +42,13 @@ export default class Validate {
             onSubmitHandler: Validate.noop
         }, option);
 
-        this._changeHandler = (e: Event) => {
+        this._changeHandler = (e: HTMLElementEvent<HTMLInputElement>) => {
             this.update(e);
         };
-        this._inputHandler = (e: Event) => {
+        this._inputHandler = (e: HTMLElementEvent<HTMLInputElement>) => {
             this.update(e);
         };
-        this._submitHandler = (e: Event) => {
+        this._submitHandler = (e: HTMLElementEvent<HTMLInputElement>) => {
             if (!this.isValid()) return;
             e.preventDefault();
             this.submit();
@@ -73,16 +77,24 @@ export default class Validate {
      * formの変更を元に画面を更新する
      * @param e
      */
-    update(e: Event) {
-        let target: any = e.target;
+    update(e: HTMLElementEvent<HTMLInputElement>) {
+        let target = e.target;
         target.classList.add('is-dirty');
+
+        // IEでselectのvalidityの値の反映が遅れるバグの回避
+        // https://github.com/travis-ci/emberx-select/commit/4d85d0ac9665ef27c60f9188a7b29199f930b10f
+        if( target.nodeName === 'SELECT'){
+            const value = target.value;
+            e.target.value = 'ie-hack';
+            e.target.value = value;
+        }
 
         let customValidate = this.option.customValidate[target.name];
         if (customValidate) {
             customValidate.apply(this, [target, this.form]);
         }
 
-        this.option.onCheckHandler.apply(this, [target, target.validity]);
+        this.option.onCheckHandler.apply(this, [target, e.target.validity]);
 
         if (this.form.checkValidity()) {
             this.disabled(false);
