@@ -1,4 +1,5 @@
-import Validate from '../lib/';
+import * as assert from 'power-assert';
+import Validate from '../src/index';
 
 describe('Validate', () => {
 
@@ -21,7 +22,7 @@ describe('Validate', () => {
     };
 
     beforeEach(() => {
-         document.body.innerHTML = fixtures;
+        document.body.innerHTML = fixtures;
 
         $form = document.getElementById('form');
         $submit = $form.querySelector('button');
@@ -76,7 +77,7 @@ describe('Validate', () => {
     it('init', () => {
         // DOM
         let htmlString = '<form id="form"><input type="text" name="name" required=""><input type="text" name="text" minlength="4"><input type="email" name="email"><input type="tel" name="tel"><select name="select"><option value=""></option><option value="1">1</option><option value="2">2</option></select><input type="radio" name="radio"><input type="radio" name="radio"><input type="checkbox" name="checkbox"><input type="password" name="password" required=""><input type="password" name="passwordConfirm" required=""><button type="submit" disabled="disabled">送信</button></form>';
-        assert($form.outerHTML.replace(/>\s+/g,'>') === htmlString);
+        assert($form.outerHTML.replace(/>\s+/g, '>') === htmlString);
         assert(validate.submitBtn.outerHTML.replace(/\n|\t/g, '') === '<button type="submit" disabled="disabled">送信</button>');
 
         // Event
@@ -160,7 +161,8 @@ describe('Validate', () => {
         });
 
         it('onCheckHandler', () => {
-            let onCheckHandler = function(element, validity) {};
+            let onCheckHandler = function (element, validity) {
+            };
             validate.option.onCheckHandler = onCheckHandler;
             spy.onCheckHandler = sinon.spy(validate.option, 'onCheckHandler');
 
@@ -179,10 +181,10 @@ describe('Validate', () => {
             setValue();
 
             let customValidate = {
-                password: function(element, form) {
+                password: function (element, form) {
                     this.trigger('input', form['passwordConfirm']);
                 },
-                passwordConfirm: function(element, form) {
+                passwordConfirm: function (element, form) {
                     if (element.value !== form['password'].value) {
                         element.setCustomValidity('パスワードが一致しません');
                         return;
@@ -275,7 +277,8 @@ describe('Validate', () => {
         });
 
         it('option.onSubmitHandler指定 (form.submitは発火させない)', () => {
-            let submitHandler = function() {};
+            let submitHandler = function () {
+            };
             validate.option.onSubmitHandler = submitHandler;
             spy.onSubmitHandler = sinon.spy(validate.option, 'onSubmitHandler');
 
@@ -327,17 +330,21 @@ describe('Validate', () => {
         obj = {};
         src = {
             customValidate: {
-                name: () => {}
+                name: () => {
+                }
             },
-            onCheckHandler: () => {},
-            onSubmitHandler: () => {}
+            onCheckHandler: () => {
+            },
+            onSubmitHandler: () => {
+            }
         };
         validate.extend(obj, src);
 
         assert(obj.onCheckHandler === src.onCheckHandler);
         assert(obj.customValidate.name === src.customValidate.name);
 
-        src.customValidate.name = () => {};
+        src.customValidate.name = () => {
+        };
         assert(obj.customValidate.name !== src.customValidate.name);
     });
 

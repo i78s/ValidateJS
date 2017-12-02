@@ -1,4 +1,5 @@
-import { ValidateMessages } from '../lib';
+import * as assert from 'power-assert';
+import { ValidateMessages } from '../src/index';
 
 describe('ValidateMessages', () => {
 
