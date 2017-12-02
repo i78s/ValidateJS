@@ -15,10 +15,10 @@
   },
   "main": "./lib/index.js",
   "scripts": {
+    "prepublish": "npm run build",
     "build": "$(npm bin)/tsc",
     "watch": "$(npm bin)/tsc --watch",
-    "test": "npm run build && karma start",
-    "start": "npm run watch & npm test"
+    "test": "npm run build && karma start"
   },
   "author": "i78s",
   "license": "MIT",
