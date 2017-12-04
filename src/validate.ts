@@ -4,7 +4,7 @@ interface HTMLElementEvent<T extends HTMLElement> extends Event {
 
 interface ValidateOption {
     customValidate?: {
-        [key: string]: (element: HTMLInputElement | HTMLSelectElement, form: HTMLFormElement) => {};
+        [key: string]: (element: HTMLInputElement | HTMLSelectElement, form: HTMLFormElement) => void;
     }
     onCheckHandler?(element: HTMLInputElement | HTMLSelectElement, validity: ValidityState): void;
     onSubmitHandler?(): void;
