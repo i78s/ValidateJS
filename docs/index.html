@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>ValidateJS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="bootstrap.min.css">
+
+    <style>
+        .js-validate-messages > * {
+            display: none;
+        }
+        .js-validate-messages > *.is-show {
+            display: block;
+        }
+
+        .hll { background-color: #ffffcc }
+        .c { color: #408080; font-style: italic } /* Comment */
+        .err { border: 1px solid #FF0000 } /* Error */
+        .k { color: #008000; font-weight: bold } /* Keyword */
+        .o { color: #666666 } /* Operator */
+        .cm { color: #408080; font-style: italic } /* Comment.Multiline */
+        .cp { color: #BC7A00 } /* Comment.Preproc */
+        .c1 { color: #408080; font-style: italic } /* Comment.Single */
+        .cs { color: #408080; font-style: italic } /* Comment.Special */
+        .gd { color: #A00000 } /* Generic.Deleted */
+        .ge { font-style: italic } /* Generic.Emph */
+        .gr { color: #FF0000 } /* Generic.Error */
+        .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+        .gi { color: #00A000 } /* Generic.Inserted */
+        .go { color: #888888 } /* Generic.Output */
+        .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+        .gs { font-weight: bold } /* Generic.Strong */
+        .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+        .gt { color: #0044DD } /* Generic.Traceback */
+        .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+        .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+        .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+        .kp { color: #008000 } /* Keyword.Pseudo */
+        .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+        .kt { color: #B00040 } /* Keyword.Type */
+        .m { color: #666666 } /* Literal.Number */
+        .s { color: #BA2121 } /* Literal.String */
+        .na { color: #7D9029 } /* Name.Attribute */
+        .nb { color: #008000 } /* Name.Builtin */
+        .nc { color: #0000FF; font-weight: bold } /* Name.Class */
+        .no { color: #880000 } /* Name.Constant */
+        .nd { color: #AA22FF } /* Name.Decorator */
+        .ni { color: #999999; font-weight: bold } /* Name.Entity */
+        .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+        .nf { color: #0000FF } /* Name.Function */
+        .nl { color: #A0A000 } /* Name.Label */
+        .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+        .nt { color: #008000; font-weight: bold } /* Name.Tag */
+        .nv { color: #19177C } /* Name.Variable */
+        .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+        .w { color: #bbbbbb } /* Text.Whitespace */
+        .mb { color: #666666 } /* Literal.Number.Bin */
+        .mf { color: #666666 } /* Literal.Number.Float */
+        .mh { color: #666666 } /* Literal.Number.Hex */
+        .mi { color: #666666 } /* Literal.Number.Integer */
+        .mo { color: #666666 } /* Literal.Number.Oct */
+        .sb { color: #BA2121 } /* Literal.String.Backtick */
+        .sc { color: #BA2121 } /* Literal.String.Char */
+        .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+        .s2 { color: #BA2121 } /* Literal.String.Double */
+        .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+        .sh { color: #BA2121 } /* Literal.String.Heredoc */
+        .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+        .sx { color: #008000 } /* Literal.String.Other */
+        .sr { color: #BB6688 } /* Literal.String.Regex */
+        .s1 { color: #BA2121 } /* Literal.String.Single */
+        .ss { color: #19177C } /* Literal.String.Symbol */
+        .bp { color: #008000 } /* Name.Builtin.Pseudo */
+        .vc { color: #19177C } /* Name.Variable.Class */
+        .vg { color: #19177C } /* Name.Variable.Global */
+        .vi { color: #19177C } /* Name.Variable.Instance */
+        .il { color: #666666 } /* Literal.Number.Integer.Long */
+
+    </style>
+</head>
+<body>
+
+<a href="https://github.com/i78s/ValidateJS"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+<div class="jumbotron">
+    <div class="container">
+        <h1>ValidateJS</h1>
+
+        <div>
+            <iframe src="//ghbtns.com/github-btn.html?user=i78s&repo=ValidateJS&type=watch&count=true"
+                    allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
+            <iframe src="//ghbtns.com/github-btn.html?user=i78s&repo=ValidateJS&type=fork&count=true"
+                    allowtransparency="true" frameborder="0" scrolling="0" width="95" height="20"></iframe>
+        </div>
+    </div>
+</div>
+<div class="container">
+
+    <h2>About</h2>
+    <p>ValidateJSはjQuery非依存のシンプルなフォームバリデーションライブラリです。</p>
+    <p><a href="https://github.com/i78s/ValidateJS">Githubリポジトリ</a></p>
+    <p><a href="#demo">デモを見る</a></p>
+
+    <h3>対応ブラウザ</h3>
+    <p>モダンブラウザ（IEは10以上）、モバイルも対応しています。</p>
+    <p>不具合報告は<a href="https://github.com/i78s/ValidateJS/issues">こちら</a>までお願いします。</p>
+
+    <h2>Install</h2>
+
+    <figure class="highlight">
+        <pre><code class="language-bash" data-lang="bash"><span class="gp">$ </span>npm install i78s.validatejs</code></pre>
+    </figure>
+
+    <h2>Setup</h2>
+
+    <p>webpackやrequireして使ってください</p>
+
+    <div class="highlight">
+        <pre><span class="kr">import</span> <span class="nx">Validate</span> <span
+                class="nx">from</span> <span class="s1">&#39;i78s.validatejs&#39;</span><span class="p">;</span>
+
+<span class="kd">let</span> <span class="nx">$form</span> <span class="o">=</span> <span class="nb">document</span><span
+                    class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span
+                    class="p">);</span>
+<span class="kd">let</span> <span class="nx">validate</span> <span class="o">=</span> <span class="k">new</span> <span
+                    class="nx">Validate</span><span class="p">(</span><span class="nx">$form</span><span class="p">,</span> <span
+                    class="nx">option</span><span class="p">);</span>
+</pre>
+    </div>
+
+    <h2>Options</h2>
+
+    <div class="highlight">
+        <pre><span class="nx">option</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">customValidate</span><span class="o">?:</span> <span class="p">{</span>
+        <span class="p">[</span><span class="nx">key</span>: <span class="kt">string</span><span class="p">]</span><span class="o">:</span> <span class="p">(</span><span class="nx">element</span>: <span class="kt">HTMLInputElement</span> <span class="o">|</span> <span class="nx">HTMLSelectElement</span><span class="p">,</span> <span class="nx">form</span>: <span class="kt">HTMLFormElement</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{};</span>
+    <span class="p">}</span>
+    <span class="nx">onCheckHandler</span><span class="o">?</span><span class="p">(</span><span class="nx">element</span>: <span class="kt">HTMLInputElement</span> <span class="o">|</span> <span class="nx">HTMLSelectElement</span><span class="p">,</span> <span class="nx">validity</span>: <span class="kt">ValidityState</span><span class="p">)</span><span class="o">:</span> <span class="k">void</span><span class="p">;</span>
+    <span class="nx">onSubmitHandler</span><span class="o">?</span><span class="p">()</span><span class="o">:</span> <span class="k">void</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+    </div>
+
+
+    <h3>onCheckHandler</h3>
+    <p>formのinput / changeイベントが発火した際に呼ばれるcallbackを指定できます。</p>
+    <p>同梱されているValidateMessagesと組み合わせる事でHTML構造に依存しないエラー文言の制御が可能です。</p>
+
+    <div class="highlight"><pre><span class="kr">import</span> <span class="nx">Validate,</span> <span class="nx">{ ValidateMessages }</span> <span class="nx">from</span> <span class="s1">&#39;i78s.validatejs&#39;</span><span class="p">;</span>
+
+<span class="kd">let</span> <span class="nx">validateMessages</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ValidateMessages</span><span class="p">(</span><span class="s1">&#39;.js-validate-messages&#39;</span><span class="p">);</span>
+<span class="kd">let</span> <span class="nx">validate</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Validate</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">onCheckHandler</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">element</span><span class="p">,</span> <span class="nx">validity</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="nx">parent</span> <span class="o">=</span> <span class="nx">element</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">;</span>
+        <span class="nx">validateMessages</span><span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="nx">element</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span> <span class="nx">validity</span><span class="p">);</span>
+
+        <span class="nx">validateMessages</span><span class="p">.</span><span class="nx">toggleClass</span><span class="p">(</span><span class="nx">parent</span><span class="p">,</span> <span class="s1">&#39;has-success&#39;</span><span class="p">,</span> <span class="nx">validity</span><span class="p">.</span><span class="nx">valid</span><span class="p">);</span>
+        <span class="nx">validateMessages</span><span class="p">.</span><span class="nx">toggleClass</span><span class="p">(</span><span class="nx">parent</span><span class="p">,</span> <span class="s1">&#39;has-error&#39;</span><span class="p">,</span> <span class="o">!</span><span class="nx">validity</span><span class="p">.</span><span class="nx">valid</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+
+    <h3>onSubmitHandler</h3>
+
+    <p>formのsubmitイベントが発火した際に呼ばれるcallbackを指定できます。</p>
+    <p>onSubmitHandlerが未指定の場合はform.submitが呼ばれます。</p>
+
+    <div class="highlight"><pre><span class="kr">import</span> <span class="nx">Validate</span> <span class="nx">from</span> <span class="s1">&#39;i78s.validatejs&#39;</span><span class="p">;</span>
+
+<span class="kd">let</span> <span class="nx">validate</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Validate</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">onSubmitHandler</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// 例</span>
+        <span class="c1">// this.disabled(true);</span>
+        <span class="c1">// フォームの値を取得してajaxを投げる</span>
+        <span class="c1">// 通信完了時に this.disabled(false); で送信ボタンのdisabledを解除</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+
+
+    <h3>customValidate</h3>
+
+    <p>customValidateのkeyと同じname属性を持つinput / select要素が変更された際にカスタムバリデーションを設定する事ができます。</p>
+
+    <div class="highlight"><pre><span class="kr">import</span> <span class="nx">Validate</span> <span class="nx">from</span> <span class="s1">&#39;i78s.validatejs&#39;</span><span class="p">;</span>
+
+<span class="kd">let</span> <span class="nx">validate</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Validate</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">customValidate</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">password</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">element</span><span class="p">,</span> <span class="nx">form</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;change&#39;</span><span class="p">,</span> <span class="nx">form</span><span class="p">[</span><span class="s1">&#39;passwordConfirm&#39;</span><span class="p">]);</span>
+        <span class="p">},</span>
+        <span class="nx">passwordConfirm</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">element</span><span class="p">,</span> <span class="nx">form</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">element</span><span class="p">.</span><span class="nx">value</span> <span class="o">!==</span> <span class="nx">form</span><span class="p">[</span><span class="s1">&#39;password&#39;</span><span class="p">].</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">element</span><span class="p">.</span><span class="nx">setCustomValidity</span><span class="p">(</span><span class="s1">&#39;パスワードが一致しません&#39;</span><span class="p">);</span>
+                <span class="k">return</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="nx">element</span><span class="p">.</span><span class="nx">setCustomValidity</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+
+
+
+
+    <h2 id="demo">Demo</h2>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <form id="form">
+                <div class="form-group">
+                    <label>お名前 <span class="label label-danger">必須項目</span></label>
+                    <input type="text" class="form-control" name="name" required>
+                    <div data-messages="name" class="js-validate-messages">
+                        <small data-message="valueMissing" class="help-block">必須項目です</small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>メールアドレス <span class="label label-danger">必須項目</span></label>
+                    <input type="email" class="form-control" name="email" required>
+                    <div data-messages="email" class="js-validate-messages">
+                        <small data-message="valueMissing" class="help-block">必須項目です</small>
+                        <small data-message="typeMismatch" class="help-block">正しいメールアドレスの形式を入力してください</small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>パスワード <span class="label label-danger">必須項目</span></label>
+                    <input type="password" class="form-control" name="password" minlength="8" required>
+                    <div data-messages="password" class="js-validate-messages">
+                        <small data-message="valueMissing" class="help-block">必須項目です</small>
+                        <small data-message="tooShort" class="help-block">8文字上入力してください</small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>パスワードの再確認 <span class="label label-danger">必須項目</span></label>
+                    <input type="password" class="form-control" name="passwordConfirm" required>
+                    <div data-messages="passwordConfirm" class="js-validate-messages">
+                        <small data-message="valueMissing" class="help-block">必須項目です</small>
+                        <small data-message="customError" class="help-block">パスワードが一致しません</small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>性別 <span class="label label-danger">必須項目</span></label>
+                    <select name="gender" class="form-control" required>
+                        <option value="">選択してください</option>
+                        <option value="Male">男性</option>
+                        <option value="Female">女性</option>
+                        <option value="NotApplicable">その他</option>
+                    </select>
+                    <div data-messages="gender" class="js-validate-messages">
+                        <small data-message="valueMissing" class="help-block">必須項目です</small>
+                    </div>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" required> 利用規約に同意する
+                    </label>
+                </div>
+
+                <button type="submit" disabled="disabled" class="btn btn-primary btn-block">Submit</button>
+            </form>
+        </div>
+
+    </div>
+
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
