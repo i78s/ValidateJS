@@ -21,8 +21,8 @@ export default class Validate {
     private _changeHandler: (e: HTMLElementEvent<HTMLInputElement>) => void;
     private _inputHandler: (e: HTMLElementEvent<HTMLInputElement>) => void;
 
-    constructor(element: HTMLFormElement, option: ValidateOption);
-    constructor(element: string, option: ValidateOption);
+    constructor(element: HTMLFormElement, option?: ValidateOption);
+    constructor(element: string, option?: ValidateOption);
     constructor(
         element: any,
         option: ValidateOption = {}
@@ -31,16 +31,17 @@ export default class Validate {
         this.form = element;
 
         if (typeof element === "string") {
-            this.form = <HTMLFormElement>document.getElementById(element);
+            this.form = document.getElementById(element) as HTMLFormElement;
         }
 
-        this.submitBtn = <HTMLButtonElement>this.form.querySelector('button');
+        this.submitBtn = this.form.querySelector('button') as HTMLButtonElement;
 
-        this.option = this.extend({
+        this.option = {
             customValidate: {},
             onCheckHandler: Validate.noop,
-            onSubmitHandler: Validate.noop
-        }, option);
+            onSubmitHandler: Validate.noop,
+            ...option,
+        };
 
         this._changeHandler = (e: HTMLElementEvent<HTMLInputElement>) => {
             this.update(e);
@@ -107,7 +108,7 @@ export default class Validate {
      * changeイベントを強制発火させる
      * @param element
      */
-    trigger(event: string, element: HTMLInputElement | HTMLSelectElement) {
+    trigger(event: string, element: HTMLInputElement | HTMLSelectElement | HTMLFormElement) {
         let e = document.createEvent('HTMLEvents');
         e.initEvent(event, true, true);
         element.dispatchEvent(e);
@@ -145,21 +146,5 @@ export default class Validate {
         this.form.removeEventListener('change', this._changeHandler);
         this.form.removeEventListener('input', this._inputHandler);
         this.form.removeEventListener('submit', this._submitHandler);
-    }
-
-    extend(obj: any = {}, ...src: any[]): any {
-        if (arguments.length < 2) {
-            return obj;
-        }
-        for (var i = 1; i < arguments.length; i++) {
-            for (var key in arguments[i]) {
-                if (arguments[i][key] !== null && typeof (arguments[i][key]) === "object") {
-                    obj[key] = this.extend(obj[key], arguments[i][key]);
-                } else {
-                    obj[key] = arguments[i][key];
-                }
-            }
-        }
-        return obj;
     }
 }

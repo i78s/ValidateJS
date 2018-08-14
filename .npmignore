@@ -1,5 +1,4 @@
 src/
-test/
-karma.conf.js
 tsconfig.json
+tsconfig.jest.json
 webpack.config.js

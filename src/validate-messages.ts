@@ -4,17 +4,16 @@
  */
 export default class ValidateMessages {
 
-    private elements: NodeList;
+    private elements: NodeListOf<Element>;
     private error: {
         key?: string;
-        element?: HTMLElement;
+        element?: Element;
     };
     private messages: {
-        [key: string]: HTMLElement;
+        [key: string]: Element;
     };
 
     constructor(selector: string) {
-
         this.elements = document.querySelectorAll(selector);
         this.error = {};
         this.messages = {};
@@ -23,7 +22,7 @@ export default class ValidateMessages {
     }
 
     init() {
-        Array.prototype.forEach.call(this.elements, (el: HTMLElement) => {
+        Array.prototype.forEach.call(this.elements, (el: Element) => {
             let key = el.getAttribute('data-messages');
             this.messages[key] = el;
         });
@@ -35,14 +34,14 @@ export default class ValidateMessages {
             return;
         }
 
-        let messages: NodeList = target.children;
+        let messages = target.children;
         let len = messages.length;
-        let isValid: boolean = validity.valid;
+        let isValid = validity.valid;
 
         this.error = {};
 
         while (len--) {
-            let message = <HTMLElement>messages[len];
+            let message = messages[len];
             this.toggleClass(message, 'is-show', false);
 
             if (isValid) continue;
@@ -59,7 +58,7 @@ export default class ValidateMessages {
         }
     }
 
-    toggleClass(element: HTMLElement, className: string, force?: boolean) {
+    toggleClass(element: Element, className: string, force?: boolean) {
         if (typeof force === 'undefined') {
             element.classList.toggle(className);
             return;
